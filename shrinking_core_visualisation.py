@@ -48,7 +48,7 @@ def animate(i):
 
     white_patch = pt.Patch(color='ghostwhite', label = 'H, conc at surface, ca')
     blue_patch = pt.Patch(color='blue', label='U')
-    red_patch = pt.Patch(color='red', label='UH3')
+    red_patch = pt.Patch(color='green', label='UH3')
     black_patch = pt.Patch(color='black', label='UO2')
     choc = pt.Patch(color='lavender', label = 'H, feed conc, cb')
     plt.legend(handles=[red_patch, blue_patch,black_patch, choc, white_patch], loc=7,
