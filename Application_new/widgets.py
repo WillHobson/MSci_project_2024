@@ -7,6 +7,8 @@ import os
 import pandas as pd
 import shrinkingcoremodel as scm
 import warnings
+from io import BytesIO
+
 
 class ButtWidg:
     def __init__(self, SM, PL):
@@ -46,6 +48,13 @@ class ButtWidg:
         # Observe the widgets to track changes
         self.dropdown.observe(self.inst_pl.update_plot, names='value')
         #self.dropdown.observe(lambda change: self.inst_pl.update_plot(change, 0), names='value')
+        
+    def update_dropdown(self, filename):
+        #self.dropdown_button()
+        file_list = sorted(self.get_file_list(self.current_directory+'/stakebake_data'))
+        filtered_list = [x for x in file_list if x != '.DS_Store']
+        self.dropdown.options = filtered_list
+        self.dropdown.value = filename
 
     
     #This function is used to get the file names from data directory
@@ -149,6 +158,23 @@ class ButtWidg:
     #Button to upload own data - needs work
     def upload_button(self):
         self.upload = FileUpload(accept='.csv', multiple=True)
+        self.upload.observe(self.on_upload, names='_counter')
+        
+        
+   # Handle CSV file upload event
+    def on_upload(self,change):
+        target_directory = self.current_directory + '/stakebake_data/'
+        for filename, file_info in self.upload.value.items():
+            content = file_info['content']
+            target_path = os.path.join(target_directory, filename)
+
+            # Check if the file is a CSV file
+            if filename.endswith('.csv'):
+                # Read the CSV content and save to target directory
+                df = pd.read_csv(BytesIO(content))
+                df.to_csv(target_path, index=False)
+                
+        self.update_dropdown(filename)
     
 
     #Dispplays textboxes where simulation parameters can be inserted      

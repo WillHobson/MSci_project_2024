@@ -138,8 +138,9 @@ class Plots:
         p1 = figure(title= f'Plot of {selected_function}')#, width = 400, height = 400)
         p1.min_border_bottom = 40
         p1.sizing_mode = 'scale_both'
+        data.columns = ['x', ' y']
         with self.plot_output:
-            x = data.x
+            x = data['x']
             y=data[' y']
             if value==100:
                 p1.line(self.xfit, self.yfit*np.max(y), line_color='red', legend_label='model fit')
