@@ -92,25 +92,26 @@ def simulation(T, initial_pellet_size, p, N, a,rho_h,rho_u,rho_uh3,velocity):
     pressure_change = (1800 - ((3/((4/3)*3.14*((initial_pellet_size*1e-6)**3)*19.1e6))*((4/3)*3.14*((initial_pellet_size*1e-6)**3 - (r_c*1e-6)**3))*rho_u*1.5*8.314*T/0.00048)/100)
     m = thiele_modulus(initial_pellet_size , kr, c_c, de)
     y =  np.log10(c_c)
-    results = [time, x, pressure_change, y, relitive_sphere_radius, m]
+    results = [time, x, pressure_change, y, relitive_sphere_radius, m, relitive_sphere_radius, r_o]
     return results
 
-def visualise(time, outer_size,core_size, logconc):
+def visualise(time, outer_size,core_size, logconc, title):
     from matplotlib import cm
     import numpy as np
     from celluloid import Camera
     from matplotlib import patches as pt
     import matplotlib.pyplot as plt
     import numpy as np
+    import os
 
-
-    fig = plt.figure(figsize=(7,7))
+    fig = plt.figure(figsize=(14,5))
+    fig.suptitle(title)
     centre_x=0
     centre_y=0
-    gs = fig.add_gridspec(2,2)
-    ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
-    ax3 = fig.add_subplot(gs[1, :])
+    gs = fig.add_gridspec(1,3)
+    ax1 = fig.add_subplot(gs[0, 1])
+    ax2 = fig.add_subplot(gs[0, 0])
+    ax3 = fig.add_subplot(gs[0, 2])
     ax1.set(ylabel='relative particle dimension', xlabel='time')
     ax2.set(ylabel='H conc at core surface', xlabel='time')
     ax3.set(xlim=(-1.5,1.5),ylim=(-1.5,1.5))
@@ -128,7 +129,6 @@ def visualise(time, outer_size,core_size, logconc):
     #ax3.add_artist(legend)
 
 
-
     camera = Camera(fig)
     for _ in range(0,101):
         ax2.plot(time[:_],logconc[:_],color='green' )
@@ -143,5 +143,7 @@ def visualise(time, outer_size,core_size, logconc):
         ax1.plot(time[:_], core_size[:_], color='blue')
 
         camera.snap()
+    plt.close()
     anim = camera.animate(interval=10, blit=True)
-    anim.save('test2.gif', writer='pillow')
+    anim_loc = os.getcwd()+'/'+title+'.gif'  
+    anim.save(anim_loc, writer='pillow')

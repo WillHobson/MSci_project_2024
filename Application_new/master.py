@@ -74,8 +74,9 @@ class FunctionPlotter:
         #Third row is for the fit to experiment button and sliders
         thirdrow = widgets.HBox([self.inst_bw.fit_output, self.inst_bw.slider_output])
         
+        anim_butts = widgets.HBox([self.inst_bw.anim_butt_output, self.inst_bw.anim_close_output])
         #Line everything up vertically
-        display_layout = widgets.VBox([self.inst_pl.plot5_output, title_html2, separator_html, toprow, title_html, separator_html, secondrow, thirdrow])
+        display_layout = widgets.VBox([self.inst_pl.plot5_output, title_html2, separator_html, toprow, title_html, separator_html, secondrow, thirdrow, self.inst_pl.plot6_output, anim_butts])
 
         #set background colour for GUI
         custom_style = '<style>.widget-container { background-color: #ADD8E6; }</style>'
@@ -101,7 +102,13 @@ class ShrinkingCore:
         a=1.11e-10
         initial_pellet_size = 360
         r = scm.simulation(R,T,P,100,1e-10,rho_h,rho_u,rho_uh3,velocity)
-        xdat = r[0]
-        ydat = r[1]
-        zdat = r[2]
-        return xdat/100000, ydat, zdat
+        times = r[0]/100000
+        crad = r[1]
+        press = r[2]
+        outerrad = r[6]
+        return times, crad, press, outerrad
+   
+    def visualise(self,T,O,C,P,t):
+        scm.visualise(T,O,C,P,t);
+    
+    

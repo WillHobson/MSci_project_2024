@@ -26,6 +26,8 @@ class ButtWidg:
         #self.de_slider()
         self.slider_output = widgets.Output()
         self.fit_output = widgets.Output()
+        self.anim_butt_output = widgets.Output()
+        self.anim_close_output = widgets.Output()
         
 
         # Create an Output widget to hold the textboxes
@@ -141,6 +143,8 @@ class ButtWidg:
             self.inst_pl.plot2(r,t,p, model)
             self.de_slider()
             self.fit()
+            self.show_anim()
+            self.close_anim()
         except:
             with self.inst_pl.plot4_output:
                 self.inst_pl.plot4_output.clear_output()
@@ -170,7 +174,7 @@ class ButtWidg:
 
             # Check if the file is a CSV file
             if filename.endswith('.csv'):
-                # Read the CSV content and save to target directory
+                # Read thse CSV content and save to target directory
                 df = pd.read_csv(BytesIO(content))
                 df.to_csv(target_path, index=False)
                 
@@ -270,3 +274,51 @@ class ButtWidg:
             
     def on_fitting_click(self, b):
         self.inst_pl.update_plot(self.dropdown.value, 100)
+        
+    def show_anim(self):
+        self.anim_butt_output.clear_output(wait=True)
+        self.anim_button = widgets.Button(description='Show Animation')
+        self.anim_button.on_click(self.on_anim_click)
+        with self.anim_butt_output:
+            display(self.anim_button)
+            
+            
+    def check_for_anim_file(self):
+        anim_loc = self.current_directory+'/test2.gif'  
+        if os.path.exists(anim_loc):
+            return 0
+        else:
+            print('waiting for file')
+            time.sleep(5)
+            with self.inst_pl.plot6_output:
+                print('CREATING ANIMATION')
+            self.check_for_anim_file()
+        
+            
+    def on_anim_click(self,b):
+        r = self.textbox1.value
+        t = self.textbox2.value
+        p = self.textbox3.value
+        model = self.radiobuttons.value
+        self.inst_pl.create_animation(r,t,p, model)
+        self.check_for_anim_file()
+        self.inst_pl.update_animation(f'Rad={r}_Temp={t}_Press={p}')
+        #sim_anim = self.inst_sm.simulate(360, 364, 26600)
+        
+    def close_anim(self):
+        self.anim_close_output.clear_output(wait=True)
+        self.anim_close = widgets.Button(description='Close Animation')
+        self.anim_close.on_click(self.on_animclose_click)
+        with self.anim_close_output:
+            display(self.anim_close)
+           
+        
+    def on_animclose_click(self, b):
+        self.inst_pl.plot6_output.clear_output(wait=True)
+        self.inst_pl.plot6_output.layout.height = '0px'
+        self.inst_pl.plot6_output.layout.width = '0px'
+        
+        
+                   
+
+        
