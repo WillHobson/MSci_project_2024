@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
-from IPython.display import display, clear_output, HTML
+from IPython.display import display, clear_output, HTML, Image
 from ipywidgets import FileUpload
 import os
 import pandas as pd
@@ -23,6 +23,7 @@ class Plots:
         self.plot_output = widgets.Output(layout={'width': '420px', 'height': '405px'})
         self.plot4_output = widgets.Output(layout={'width': '420px', 'height': '110px'})
         self.plot5_output = widgets.Output(layout={'width': '900px', 'height': '50px' })
+        self.plot6_output = widgets.Output()
         self.model_descriptions()
 
  
@@ -71,26 +72,12 @@ class Plots:
             sim = self.inst_sm.simulate(r,t,p)
             x = sim[0]
             y = sim[1]
-            p3.line(x, y, legend_label = 'SCM')
-            p3.legend.location = "bottom_right"
+            y_outer = sim[3]
+            p3.line(x, y, legend_label = 'Core radius (SCM)')
+            p3.line(x, y_outer, legend_label = 'Particle radius (SCM)', line_color='red')
+            p3.legend.location = "bottom_left"
             show(p3)  
-            
-    #plotting the opening scene of the animation
-    #This needs work - needs to be associated with a play button
-    #needs the simulation data
-    #needs to show an animated gif of reaction over time
-#     def plot2(self):
-#         with self.plot2_output:
-#             fig,ax = plt.subplots(figsize = (4,4))
-#             ax.set(xlim=(-0.5,0.5), ylim=(-0.5,0.5))
-#             ax.axis('equal')
-#             centre_x = 0
-#             centre_y = 0
-#             ax.add_patch(plt.Circle((centre_x,centre_y),0.3, color='green'))
-#             ax.add_patch(plt.Circle((centre_x,centre_y),0.08, color='blue'))
-#             ax.annotate("Ro", xy=(centre_x, centre_y), xytext=(0.3+0.011, -0.01),arrowprops=dict(arrowstyle="]->", color='yellow'))
-#             ax.annotate("Rc", xy=(centre_x, centre_y), xytext=(-0.02, 0.08+0.02),arrowprops=dict(arrowstyle="]->", color='yellow'))
-#             plt.show()
+          
             
             
     def plot2(self, r,t,p, model):
@@ -154,3 +141,31 @@ class Plots:
     def save_fitting_data(self, xfit, yfit):
         self.xfit = xfit
         self.yfit = yfit
+        
+    def create_animation(self, r,t,p,model):
+        self.plot6_output.layout.height = '405px'
+        self.plot6_output.layout.width = '950px'
+        with self.plot6_output:
+            print('CREATING ANIMATION - please wait')
+        res = self.inst_sm.simulate(r,t,p)
+        TIME = res[0]
+        ORAD = res[3]
+        CRAD = res[1]
+        PRES = res[2]
+        title = f'Rad={r}_Temp={t}_Press={p}'
+        self.inst_sm.visualise(TIME, ORAD, CRAD, PRES, title);
+
+        
+
+    def update_animation(self,title):
+        self.plot6_output.clear_output(wait=True)
+        with open(title+".gif", "rb") as file:
+            image = file.read()
+
+        play = widgets.Image(
+            value=image,
+            format='gif'
+        )
+
+        with self.plot6_output:
+            display(play)
