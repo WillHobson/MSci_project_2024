@@ -8,6 +8,7 @@ import pandas as pd
 import shrinkingcoremodel as scm
 import warnings
 from io import BytesIO
+import time
 
 
 class ButtWidg:
@@ -283,8 +284,8 @@ class ButtWidg:
             display(self.anim_button)
             
             
-    def check_for_anim_file(self):
-        anim_loc = self.current_directory+'/test2.gif'  
+    def check_for_anim_file(self, title):
+        anim_loc = self.current_directory+'/'+title+'.gif'  
         if os.path.exists(anim_loc):
             return 0
         else:
@@ -292,7 +293,7 @@ class ButtWidg:
             time.sleep(5)
             with self.inst_pl.plot6_output:
                 print('CREATING ANIMATION')
-            self.check_for_anim_file()
+            self.check_for_anim_file(title)
         
             
     def on_anim_click(self,b):
@@ -300,9 +301,10 @@ class ButtWidg:
         t = self.textbox2.value
         p = self.textbox3.value
         model = self.radiobuttons.value
+        title = f'Rad={r}_Temp={t}_Press={p}'
         self.inst_pl.create_animation(r,t,p, model)
-        self.check_for_anim_file()
-        self.inst_pl.update_animation(f'Rad={r}_Temp={t}_Press={p}')
+        self.check_for_anim_file(title)
+        self.inst_pl.update_animation(title)
         #sim_anim = self.inst_sm.simulate(360, 364, 26600)
         
     def close_anim(self):
