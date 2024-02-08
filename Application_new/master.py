@@ -38,7 +38,7 @@ class FunctionPlotter:
         self.inst_pl = PL
         
         #initialise an instance of an experimental plot
-        self.inst_pl.update_plot(self.inst_bw.dropdown.value, 1)
+        self.inst_pl.update_plot('no display')
         
         # create vertical box containing radiobuttons and simulate button
         simbox = widgets.VBox([self.inst_bw.radiobuttons, self.inst_bw.simulate])
@@ -56,7 +56,7 @@ class FunctionPlotter:
                                 self.inst_pl.plot4_output])
         
         #arange top right corner
-        topright = widgets.VBox([self.inst_pl.plot_output])
+        topright = widgets.VBox([self.inst_pl.plot_output, self.inst_bw.clear_exp])
         
         #align top right and top left corner horizontally
         toprow = widgets.HBox([topleft, topright])
@@ -102,7 +102,7 @@ class ShrinkingCore:
         a=1.11e-10
         initial_pellet_size = 360
         r = scm.simulation(R,T,P,100,1e-10,rho_h,rho_u,rho_uh3,velocity)
-        times = r[0]/100000
+        times = r[0]/1000
         crad = r[1]
         press = r[2]
         outerrad = r[6]
