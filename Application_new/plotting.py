@@ -115,7 +115,8 @@ class Plots:
             
             
     def update_plot(self, change, value=None):
-        if type(change)==str:
+        if type(change)==str and value==None:
+            print('going to clear plot')
             p1 = figure(title= f'Experimental data display')
             self.plot_output.clear_output(wait=True)
 
@@ -125,8 +126,12 @@ class Plots:
                 p1.line(x,y)
                 output_notebook(hide_banner=True)
                 show(p1)
+
         else:
-            selected_function = change['new']
+            if type(change)==str:
+                selected_function = change
+            else:
+                selected_function = change['new']
             self.plot_output.clear_output(wait=True)
             data = pd.read_csv('stakebake_data/'+selected_function)
             output_notebook(hide_banner=True)
