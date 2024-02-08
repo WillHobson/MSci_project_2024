@@ -102,7 +102,8 @@ class ShrinkingCore:
         a=1.11e-10
         initial_pellet_size = 360
         r = scm.simulation(R,T,P,100,1e-10,rho_h,rho_u,rho_uh3,velocity)
-        times = r[0]/1000
+        times = r[0]/100000
+
         crad = r[1]
         press = r[2]
         outerrad = r[6]

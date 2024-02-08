@@ -30,6 +30,7 @@ class ButtWidg:
         self.anim_butt_output = widgets.Output()
         self.anim_close_output = widgets.Output()
         self.clear_experiment()
+
         
 
         # Create an Output widget to hold the textboxes
@@ -320,7 +321,7 @@ class ButtWidg:
         self.inst_pl.plot6_output.clear_output(wait=True)
         self.inst_pl.plot6_output.layout.height = '0px'
         self.inst_pl.plot6_output.layout.width = '0px'
-        
+
     def clear_experiment(self):
         self.clear_exp = widgets.Button(description='Clear plot')
         self.clear_exp.on_click(self.on_clear_click)
@@ -328,21 +329,7 @@ class ButtWidg:
         
     def on_clear_click(self, b):
         self.inst_pl.update_plot('no display')
-                              
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
                    
 
         

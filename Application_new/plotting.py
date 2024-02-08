@@ -144,6 +144,7 @@ class Plots:
                 p1.circle(x, y, legend_label = selected_function)
                 p1.legend.location = "bottom_right"
                 show(p1)        
+
             
             
             
