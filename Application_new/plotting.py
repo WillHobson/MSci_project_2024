@@ -116,25 +116,35 @@ class Plots:
             
     def update_plot(self, change, value=None):
         if type(change)==str:
-            selected_function = change
+            p1 = figure(title= f'Experimental data display')
+            self.plot_output.clear_output(wait=True)
+
+            with self.plot_output:
+                x=[]
+                y=[]
+                p1.line(x,y)
+                output_notebook(hide_banner=True)
+                show(p1)
         else:
             selected_function = change['new']
-        self.plot_output.clear_output(wait=True)
-        data = pd.read_csv('stakebake_data/'+selected_function)
-        output_notebook(hide_banner=True)
-        p1 = figure(title= f'Plot of {selected_function}')#, width = 400, height = 400)
-        p1.min_border_bottom = 40
-        p1.sizing_mode = 'scale_both'
-        data.columns = ['x', ' y']
-        with self.plot_output:
-            x = data['x']
-            y=data[' y']
-            if value==100:
-                p1.line(self.xfit, self.yfit*np.max(y), line_color='red', legend_label='model fit')
-            
-            p1.circle(x, y, legend_label = selected_function)
-            p1.legend.location = "bottom_right"
-            show(p1)        
+            self.plot_output.clear_output(wait=True)
+            data = pd.read_csv('stakebake_data/'+selected_function)
+            output_notebook(hide_banner=True)
+            p1 = figure(title= f'Plot of {selected_function}')#, width = 400, height = 400)
+            p1.min_border_bottom = 40
+            p1.sizing_mode = 'scale_both'
+            data.columns = ['x', ' y']
+            with self.plot_output:
+                x = data['x']
+                y=data[' y']
+                if value==100:
+                    p1.line(self.xfit, self.yfit, line_color='red', legend_label='model fit')
+
+
+                p1.circle(x, y, legend_label = selected_function)
+                p1.legend.location = "bottom_right"
+                show(p1)        
+
             
             
             
